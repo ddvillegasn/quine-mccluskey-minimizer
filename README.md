@@ -72,7 +72,7 @@ Requires Python 3.8+.
 
 ```bash
 pip install -r requirements.txt
-python MetodoMcClusky3.py
+python mccluskey.py
 ```
 
 Enter minterms separated by spaces and press the calculate button.
