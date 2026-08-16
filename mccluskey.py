@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter import ttk
-from PIL import Image, ImageTk
 import math
 
 # Funciones del algoritmo de McCluskey
@@ -161,23 +160,6 @@ btn_salir.config(style='TButton')
 result_label = tk.Label(root, text="", font=fuente_resultados, bg="#F0F0F0", fg="#333333")
 result_label.pack(pady=20)
 
-# Frame para las imágenes
-frame_imagenes = tk.Frame(root, bg="#F0F0F0")
-frame_imagenes.pack(pady=20)
-
-# Cargar y mostrar la primera imagen
-imagen1 = Image.open("Foto.png")
-imagen1 = imagen1.resize((300, 200), Image.LANCZOS)  # Ajusta el tamaño de la imagen si es necesario
-imagen_tk1 = ImageTk.PhotoImage(imagen1)
-foto_label1 = tk.Label(frame_imagenes, image=imagen_tk1, bg="#F0F0F0")
-foto_label1.pack(side=tk.LEFT, padx=10)
-
-# Cargar y mostrar la segunda imagen
-imagen2 = Image.open("Molly.png")
-imagen2 = imagen2.resize((300, 200), Image.LANCZOS)  # Ajusta el tamaño de la imagen si es necesario
-imagen_tk2 = ImageTk.PhotoImage(imagen2)
-foto_label2 = tk.Label(frame_imagenes, image=imagen_tk2, bg="#F0F0F0")
-foto_label2.pack(side=tk.LEFT, padx=10)
 
 # Aplicar estilos a los botones
 style = ttk.Style()
