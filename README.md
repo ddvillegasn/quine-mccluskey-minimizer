@@ -71,9 +71,10 @@ Other limitations worth naming:
 Requires Python 3.8+.
 
 ```bash
-pip install -r requirements.txt
 python mccluskey.py
 ```
+
+Nothing to install: the program uses only the Python standard library.
 
 Enter minterms separated by spaces and press the calculate button.
 
@@ -83,15 +84,11 @@ Output: Número de variables: 3
         A'B' + A'C' + AC + AB
 ```
 
-> The window loads `Foto.png` and `Molly.png` for its header, so run the script from the repository
-> root — both files must be alongside it.
-
 ---
 
 ## Stack
 
-`Python` · `Tkinter` for the interface · `Pillow` for image handling · `math` from the standard
-library. No other dependencies.
+`Python` · `Tkinter` for the interface · `math` from the standard library. **No external dependencies.**
 
 ## Status
 
