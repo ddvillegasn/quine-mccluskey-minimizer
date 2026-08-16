@@ -1,28 +1,101 @@
-# mccluskey-simplificador
-# 🧮 Simplificador de Funciones Booleanas - Método de McCluskey
+# Quine-McCluskey Minimizer
 
-Aplicación de escritorio desarrollada en **Python** con interfaz gráfica en **Tkinter**, que implementa el **Método de McCluskey** (o método de los implicantes primos) para la simplificación de funciones booleanas.
+A desktop application that minimizes Boolean functions from a list of minterms, implementing the
+Quine-McCluskey tabular method with a Tkinter interface.
 
----
-
-## 📌 ¿Qué hace?
-- Simplifica expresiones booleanas dadas en forma de minterms.  
-- Encuentra **implicantes primos esenciales**.  
-- Minimiza el número de compuertas lógicas necesarias.  
-- Genera una expresión booleana más corta y eficiente.  
+Built for a Digital Logic course at Universidad Tecnológica de Pereira.
 
 ---
 
-## ⚙️ Funcionamiento
-1. **Entrada**: El usuario ingresa números (minterms) separados por espacios.  
-2. **Procesamiento**:
-   - Convierte los minterms a binario.  
-   - Agrupa términos por número de unos (1s).  
-   - Combina términos que difieren en un solo bit.  
-   - Encuentra los implicantes primos esenciales.  
-3. **Salida**: Una expresión booleana simplificada usando variables A, B, C, D, etc.  
+## The problem it solves
+
+Karnaugh maps stop being usable past four or five variables — the map becomes impossible to read by
+eye. Quine-McCluskey solves the same problem the other way round: instead of a visual grouping, it
+does an exhaustive tabular comparison, which means it can be run by a machine and does not degrade
+as the number of variables grows.
+
+Given a set of minterms, the program returns a simplified sum-of-products expression, which
+translates directly into fewer logic gates in a circuit.
 
 ---
 
-## 🖥 Ejemplo
-**Entrada**:  
+## How it works
+
+**1. Grouping.** Each minterm is converted to binary, padded to the number of variables the function
+needs, and filed into a group by how many `1` bits it contains. The variable count is derived from
+the input as `ceil(log2(max(minterms) + 1))` — it is not asked for.
+
+**2. Iterative combination.** Terms in adjacent groups are compared. Two terms that differ in exactly
+one bit position are merged, with a `-` marking the position that no longer matters:
+
+```
+0100  ─┐
+       ├─▶  01-0
+0110  ─┘
+```
+
+Every term that took part in a merge is marked. The process repeats over the newly formed groups
+until no further merges are possible. **Terms that never merged are the prime implicants.**
+
+**3. Cover selection.** A coverage table maps each prime implicant to the minterms it covers. The
+program then picks implicants one at a time, always choosing the one that covers the most
+still-uncovered minterms, until every minterm is covered.
+
+**4. Translation.** Each selected implicant becomes a product term: bit `1` → `A`, bit `0` → `A'`,
+`-` → the variable is dropped. The results are joined with `+`.
+
+---
+
+## Honest limitation
+
+**Step 3 is a greedy heuristic, not the exact method.**
+
+Strictly, the Quine-McCluskey algorithm identifies *essential* prime implicants — those that are the
+only cover for some minterm — and then resolves what remains with Petrick's method or an equivalent
+exact search. This implementation skips that: it takes the largest-coverage implicant at each step.
+
+For most textbook inputs the greedy choice lands on the same answer. **For a cyclic coverage chart it
+can return a valid but non-minimal cover** — correct output, just not the shortest one possible.
+
+Other limitations worth naming:
+
+- **No don't-care conditions.** Minterms are all treated as required.
+- **Variables are named `A`, `B`, `C`… positionally**, up to 26.
+- The label in the interface says *"implicantes esenciales"*; per the above, *"cover terms"* would be
+  the accurate word.
+
+---
+
+## Running it
+
+Requires Python 3.8+.
+
+```bash
+pip install -r requirements.txt
+python MetodoMcClusky3.py
+```
+
+Enter minterms separated by spaces and press the calculate button.
+
+```
+Input:  0 1 2 5 6 7
+Output: Número de variables: 3
+        A'B' + A'C' + AC + AB
+```
+
+> The window loads `Foto.png` and `Molly.png` for its header, so run the script from the repository
+> root — both files must be alongside it.
+
+---
+
+## Stack
+
+`Python` · `Tkinter` for the interface · `Pillow` for image handling · `math` from the standard
+library. No other dependencies.
+
+## Status
+
+Complete as a course project. Not maintained.
+
+The obvious next step, for anyone picking it up: replace the greedy selection in step 3 with
+Petrick's method so the result is guaranteed minimal, and add don't-care support.
